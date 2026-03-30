@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DDoS Stats Dashboard</title>
+    <style>
+        body {
+            background: #0a0a2a;
+            font-family: monospace;
+            color: #0f0;
+            text-align: center;
+            padding: 2rem;
+        }
+        h1 {
+            font-size: 3rem;
+            text-shadow: 0 0 5px #0f0;
+        }
+        .counter {
+            font-size: 8rem;
+            font-weight: bold;
+            margin: 2rem 0;
+            background: #000;
+            padding: 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            min-width: 200px;
+        }
+        button {
+            background: #0f0;
+            color: #000;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+        .info {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔥 DDoS STATS DASHBOARD 🔥</h1>
+    <div class="counter" id="counter">0</div>
+    <br>
+    <button onclick="sendRequest()">+1 Test Request</button>
+    <div class="info">
+        <p>Send POST request to <code>/api/request</code> to increase counter.</p>
+        <p>Current total: <span id="current">0</span></p>
+    </div>
+
+    <script>
+        const apiUrl = '/api/request';
+
+        async function fetchCounter() {
+            const res = await fetch(apiUrl);
+            const data = await res.json();
+            document.getElementById('counter').innerText = data.count;
+            document.getElementById('current').innerText = data.count;
+        }
+
+        async function sendRequest() {
+            await fetch(apiUrl, { method: 'POST' });
+            fetchCounter();
+        }
+
+        // Poll every 2 seconds
+        setInterval(fetchCounter, 2000);
+        fetchCounter();
+    </script>
+</body>
+</html>
